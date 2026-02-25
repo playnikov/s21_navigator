@@ -2,6 +2,7 @@
 #define S21_GRAPH_ALGORITHMS_H
 
 #include <limits>
+#include <random>
 #include <vector>
 
 #include "../s21_containers/queue.h"
@@ -31,6 +32,24 @@ struct Ant {
 class GraphAlgorithms {
  private:
   std::vector<Ant> InitializeAnts(int num_vertices, int num_ants);
+
+  void UpdatePheromones(std::vector<std::vector<double>>& pheromones,
+                        const std::vector<Ant>& ants, double evaporation_rate,
+                        double Q);
+
+  int SelectNextVertex(const Ant& ant,
+                       const std::vector<std::vector<double>>& pheromones,
+                       const std::vector<std::vector<int>>& distances,
+                       double alpha, double beta, std::mt19937& gen);
+  void CheckGraphForTSP(int n, const std::vector<std::vector<int>>& distances);
+  std::vector<std::vector<double>> InitializePheromones(int n);
+  void BuildAntPath(Ant& ant, int n,
+                    const std::vector<std::vector<double>>& pheromones,
+                    const std::vector<std::vector<int>>& distances,
+                    double alpha, double beta, std::mt19937& gen);
+  void CompleteAntPath(Ant& ant, const std::vector<std::vector<int>>& distances,
+                       TsmResult& best_result);
+
  public:
   // Part 1: Обход графа в глубину и в ширину
   std::vector<int> DepthFirstSearch(Graph& graph, int start_vertex);
@@ -46,6 +65,8 @@ class GraphAlgorithms {
 
   // Part 4: Задача коммивояжера
   TsmResult SolveTravelingSalesmanProblem(Graph& graph);
+
+  bool IsHamiltonianCycle(const std::vector<int>& path, int num_vertices);
 };
 }  // namespace s21
 

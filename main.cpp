@@ -30,7 +30,7 @@ int main() {
           graph.LoadGraphFromFile(filename);
           std::cout << "Graph loaded successfully. Vertices: "
                     << graph.GetVertexCount() << "\n";
-          graph.PrintMatrix();
+          PrintMatrix(graph.GetAdjacencyMatrix());
           break;
 
         case 2:
@@ -83,7 +83,7 @@ int main() {
             PrintMatrix(result);
           }
           break;
-        
+
         case 6:
           if (graph.GetVertexCount() == 0) {
             std::cout << "Please load a graph\n";
@@ -93,7 +93,30 @@ int main() {
             PrintMatrix(result);
           }
           break;
-
+        case 7:
+          if (graph.GetVertexCount() == 0) {
+            std::cout << "Please load a graph\n";
+          } else {
+            try {
+              auto result = algorithms.SolveTravelingSalesmanProblem(graph);
+              std::cout << "TSP route: ";
+              PrintVector(result.vertices);
+              std::cout << "Route distance: " << result.distance << "\n";
+            } catch (const std::exception& e) {
+              std::cerr << "Error solving TSP: " << e.what() << '\n';
+            }
+          }
+          break;
+        case 8:
+          if (graph.GetVertexCount() == 0) {
+            std::cout << "Please load a graph\n";
+          } else {
+            std::cout << "Enter filename: ";
+            std::cin >> filename;
+            graph.ExportGraphToDot(filename);
+            std::cout << "Graph export successfully.\n";
+          }
+          break;
         case 0:
           std::cout << "Goodbye!\n";
           break;
@@ -110,6 +133,7 @@ int main() {
 }
 
 void PrintMenu() {
+  std::cout << "---------\n";
   std::cout << "1. Load the original graph from a file\n";
   std::cout << "2. Traverse the graph in breadth and print the result to the "
                "console\n";
@@ -123,7 +147,9 @@ void PrintMenu() {
                "the resulting adjacency matrix to the console\n";
   std::cout << "7. Solve the Salesman problem, with output of the resulting "
                "route and its length to the console\n";
+  std::cout << "8. Export graph";
   std::cout << "0. Exit\n";
+  std::cout << "---------\n";
   std::cout << "Enter your choice: ";
 }
 
@@ -137,10 +163,12 @@ void PrintVector(const std::vector<int>& vec) {
 }
 
 void PrintMatrix(const std::vector<std::vector<int>>& matrix) {
+  std::cout << "=======\n";
   for (const auto& row : matrix) {
     for (const auto& val : row) {
       std::cout << val << " ";
     }
     std::cout << "\n";
   }
+  std::cout << "=======\n";
 }

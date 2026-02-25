@@ -1,4 +1,6 @@
-.vscode/*
-build/*
+../.vscode/
+build/
 graph_app
 *.a
+report/
+.clang-format
